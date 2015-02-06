@@ -1,0 +1,5 @@
+*.pyc
+staticfiles
+*.swp
+*.swo
+*~
