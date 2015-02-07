@@ -8,15 +8,15 @@ $(document).ready(function() {
 
     // string format
     if (!String.prototype.format) {
-      String.prototype.format = function() {
-        var args = arguments;
-        return this.replace(/{(\d+)}/g, function(match, number) { 
-          return typeof args[number] != 'undefined'
-            ? args[number]
-            : match
-          ;
-        });
-      };
+        String.prototype.format = function() {
+            var args = arguments;
+            return this.replace(/{(\d+)}/g, function(match, number) { 
+                return typeof args[number] != 'undefined'
+                    ? args[number]
+                    : match
+                ;
+            });
+        };
     }
 
     // sort table
@@ -33,6 +33,7 @@ $(document).ready(function() {
         }).appendTo(tbody);
     }
 
+    // ajax loading display
     function ajaxify(ele) {
         $(ele).after($ajax_loader);
         $ajax_loader.show();

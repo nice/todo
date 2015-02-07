@@ -8,4 +8,6 @@ urlpatterns = patterns('',
     url(r'^update-task/(?P<item>[^/]+)/$', 'website.views.update_task', name='update_task'),
     url(r'^delete-task/$', 'website.views.delete_task', name='delete_task'),
     url(r'^filter/(?P<target>[^/]+)/$', 'website.views.filter', name='filter'),
+    # fallback url :)
+    url(r'^.*', 'website.views.index'),
 )
