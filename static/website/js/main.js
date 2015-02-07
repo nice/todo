@@ -162,8 +162,12 @@ $(document).ready(function() {
                 state: state 
             },
             success: function(data) {
-                $tr.removeClass();
-                $tr.addClass(state);
+                if ( $tr.hasClass('expired') && state != 'done') {
+                    //do nothing 
+                } else {
+                    $tr.removeClass();
+                    $tr.addClass(state);
+                }
                 console.log('state updated');
                 dejaxify();
             }

@@ -12,7 +12,7 @@ def active(request, pattern):
 
 @register.simple_tag
 def expired(task):
-    if task.due_date < date.today():
+    if task.due_date < date.today() and task.state != 'done':
         return 'expired'
 
 # settings value
