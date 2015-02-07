@@ -3,3 +3,4 @@ staticfiles
 *.swp
 *.swo
 *~
+*.sqlite3

@@ -1,0 +1,30 @@
+body {
+    background: #ecf0f1;
+}
+.wrapper {
+    max-width: 960px;
+    margin: 15px auto;
+    padding: 15px 25px;
+    background: #ffffff;
+    min-height: 600px;
+}
+
+.authbox {
+    width: 300px;
+    margin: 10% auto;
+    padding: 5px 25px 15px;
+    background: #ffffff;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+         -o-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 0 10px #cccccc;
+       -moz-box-shadow: 0 0 10px #cccccc;
+        -ms-box-shadow: 0 0 10px #cccccc;
+         -o-box-shadow: 0 0 10px #cccccc;
+            box-shadow: 0 0 10px #cccccc;
+}
+.field-error {
+    border: 1px solid tomato !important;
+}
