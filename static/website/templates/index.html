@@ -1,52 +1,90 @@
 {% extends 'website/templates/base.html' %}
+{% load static %}
 {% load widget_tweaks %}
+{% load custom_tags %}
 
 {% block container %}
-{% if messages %}
-    <div class="messages"><br>
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <small>{{ message }}</small>
-        </div>
-        {% endfor %}
-    </div >
-{% endif %}
-<div class="wrapper">
-    <div class="pull-left">
-        <h3 class="brand">Simple ToDo</h3>
-    </div>
-    <div class="pull-right">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#task-modal">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Task
-        </button>
-        <a href="{% url 'user_logout' %}">Logout</a>
-    </div>
-    <div class="clearfix"></div>
+<div id="page">
+    <!-- ajax loader -->
+    <span class="ajax-loader" style="display:none">
+        <img src="{% static 'website/images/ajax-loader.gif'%}">
+    </span>
 
-    <br><br>
+    <!-- primary navigation -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'website:index' %}">Simple Todo</a>
+            </div>
 
-    <div class="primary">
-        <div class="time-filter">
-            <i>Filter by:</i> Day / Week / Month
-        </div> <!-- .time-filter -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <p class="navbar-btn">
+                            <button type="button" class="btn btn-primary new-task" data-toggle="modal" data-target="#taskModal">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Task
+                            </button>
+                        </p>
+                    </li>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">hello {{ request.user }}!<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li> <a href="{% url 'user_logout' %}">Logout</a> </li>
+                    </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div class="wrapper">
+        {% if messages %}
+        <div class="messages"><br>
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <small>{{ message }}</small>
+            </div>
+            {% endfor %}
+        </div >
+        {% endif %}
 
-        <br>
+        <div class="primary">
+            <div class="time-filter">
+                <ol class="breadcrumb">
+                    Filter tasks due :
+                    <li class="{% active request 'today' %}"><a href="{% url 'website:filter' 'today' %}">Today</a></li>
+                    <li class="{% active request 'week' %}"><a href="{% url 'website:filter' 'week' %}">Week</a></li>
+                    <li class="{% active request 'month' %}"><a href="{% url 'website:filter' 'month' %}">Month</a></li>
+                    <li class="{% active request 'expired' %}"><a href="{% url 'website:filter' 'expired' %}">Expired</a></li>
+                    <span class="pull-right">
+                        <a class="btn btn-xs btn-default" href="{% url 'website:index' %}">All tasks</a>
+                    </span>
+                </ol>
+            </div> <!-- .time-filter -->
 
-        <table id="tasks" class="table table-bordered table-condensed">
-            <thead>
-                <th style="width:75px;">#</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th style="width:100px;">Status</th>
-                <th>Due Date</th>
-                <th>Quick Actions</th>
-            </thead>
-            <tbody>
-            {% for task in tasks %}
-                <tr class="{{ task.state }}" data-id="{{ task.id }}">
+
+            <table id="tasks" class="table table-bordered table-condensed">
+                <thead>
+                    <th style="width:75px;">Priority</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th style="width:100px;">State</th>
+                    <th>Due Date</th>
+                    <th>Quick Actions</th>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+                <tr class="{{ task.state }} {% expired task %}" data-id="{{ task.id }}">
                     <td>
                         <select class="form-control task-priority">
                             <option value="1" {% if task.priority == 1 %}selected{% endif %}>1</option>
@@ -56,11 +94,11 @@
                             <option value="5" {% if task.priority == 5 %}selected{% endif %}>5</option>
                         </select>
                     </td>
-                    
-                    <td>{{ task.name }}</td>
-                    
-                    <td>{{ task.description }}</td>
-                    
+
+                    <td>{{ task.name|truncatechars:30 }}</td>
+
+                    <td>{{ task.description|truncatechars:50 }}</td>
+
                     <td>
                         <select class="form-control task-state">
                             <option value="todo" {% if task.state == 'todo' %}selected{% endif %}>todo</option>
@@ -68,52 +106,70 @@
                             <option value="done" {% if task.state == 'done' %}selected{% endif %}>done</option>
                         </select>
                     </td>
-                    
+
                     <td>{{ task.due_date }}</td>
-                    
+
                     <td>
                         <a class='view-task' data-toggle="modal" data-target="#genericModal" href="">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                         </a>&nbsp;
-                        <a class="edit-task" data-toggle="modal" data-target="#task-modal"href="">
+                        <a class="edit-task" data-toggle="modal" data-target="#taskModal" href="">
                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                         </a>&nbsp;
-                        <a href=""><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>&nbsp;
+                        <a class="delete-task" href="">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </a>&nbsp;
                     </td>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div> <!-- .primary -->
-</div> <!-- .wrapper -->
+                {% endfor %}
+                </tbody>
+            </table>
+        </div> <!-- .primary -->
+        <div class="clearfix"></div>
+
+        <div id="page-footer">
+            <div class="pull-left">
+                &copy; Simple Todo &ndash; 2015
+            </div>
+            <div class="pull-right">
+                Developed with &lt;3 by Jay.
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div> <!-- .wrapper -->
+
+</div> <!-- #page -->
 
 <!-- task modal -->
-<div class="modal fade" id="task-modal" tabindex="-1" role="dialog" aria-labelledby="taskModal" aria-hidden="true">
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             {% with WIDGET_ERROR_CLASS='field-error' %} 
-            <form action="/new-task/" method="POST"> {% csrf_token %}
+            <form id="task-form" action="/task/" method="POST"> {% csrf_token %}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Add new task</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="id_name">Task Name</label>
-                        {% render_field form.name class+='form-control' %}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_description">Task Description</label>
-                        {% render_field form.description class+='form-control' %}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_due_date">Due Date</label>
-                        {% render_field form.due_date class+='form-control date' %}
+                    <div id="task-inputs">
+                        <div class="form-group">
+                            <label for="id_name">Task Name</label>
+                            {% render_field form.name class+='form-control' %}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_description">Task Description</label>
+                            {% render_field form.description class+='form-control' %}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_due_date">Due Date</label>
+                            {% render_field form.due_date class+='form-control date' %}
+                        </div>
                     </div>
                 </div>
+                <input type="hidden" name="next" value="{{ request.path }}">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    <input id="task-submit" type="submit" class="btn btn-primary" value="Save">
                 </div>
             </form>
             {% endwith %}
@@ -131,6 +187,7 @@
         <h4 class="modal-title" id="myModalLabel">Task Details</h4>
       </div>
       <div class="modal-body">
+          <div class='generic-body'></div>
       </div>
     </div>
   </div>

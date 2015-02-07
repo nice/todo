@@ -1,3 +1,20 @@
+.outer {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.middle {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.inner {
+    margin-left: auto;
+    margin-right: auto; 
+    width: /*whatever width you want*/;
+}
 body {
     background: #ecf0f1;
 }
@@ -5,22 +22,54 @@ body {
     max-width: 960px;
     margin: 0 auto;
 }
-.wrapper {
+.field-error {
+    border: 1px solid tomato !important;
+}
+.todo {
+    background:  #FFB6C1;
+}
+.doing {
+    background:  #ADD8E6;
+}
+.done {
+    background: #90EE90;
+}
+.expired {
+    background: #cccccc !important;
+}
+.breadcrumb .active a {
+    color: #424242;
+    font-weight: 700;
+}
+.ajax-loader {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+.new-task {
+    margin-right: 10px;
+}
+.danger {
+    border: 1px solid tomato !important;
+}
+#page {
     max-width: 960px;
     margin: 15px auto;
-    padding: 15px 25px;
     background: #ffffff;
-    min-height: 600px;
     -webkit-box-shadow: 0 0 10px #cccccc;
        -moz-box-shadow: 0 0 10px #cccccc;
         -ms-box-shadow: 0 0 10px #cccccc;
          -o-box-shadow: 0 0 10px #cccccc;
             box-shadow: 0 0 10px #cccccc;
 }
-
+.wrapper {
+    padding: 15px 25px;
+    min-height: 600px;
+    position: relative;
+}
 .authbox {
     width: 300px;
-    margin: 10% auto;
+    margin: 0 auto;
     padding: 5px 25px 15px;
     background: #ffffff;
     -webkit-border-radius: 5px;
@@ -34,15 +83,12 @@ body {
          -o-box-shadow: 0 0 10px #cccccc;
             box-shadow: 0 0 10px #cccccc;
 }
-.field-error {
-    border: 1px solid tomato !important;
-}
-.todo {
-    background:  #FFB6C1;
-}
-.doing {
-    background:  #ADD8E6;
-}
-.done {
-    background: #90EE90;
+#page-footer {
+    position: absolute;
+    left: 0;
+    right:0;
+    bottom: 0;
+    height: 50px;
+    padding: 15px;
+    border-top: 1px solid #dddddd;
 }

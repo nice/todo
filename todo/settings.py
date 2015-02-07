@@ -87,6 +87,7 @@ STATIC_URL = '/static/'
 # Heroku Override
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 # DATABASES['default'] =  dj_database_url.config()
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
@@ -107,4 +108,7 @@ STATICFILES_DIRS = (
 )
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),
+)
+TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+    'django.core.context_processors.request',
 )

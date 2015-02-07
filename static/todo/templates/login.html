@@ -2,7 +2,9 @@
 {% load widget_tweaks %}
 
 {% block container %}
-
+<div class="outer">
+<div class="middle">
+<div class="inner">
     <div class="authbox">
         {% if messages %}
             <div class="messages"><br>
@@ -32,4 +34,8 @@
             Need an account? <a href="{% url 'user_register' %}">Register Now!</a>
         </p>
     </div> <!-- .authbox -->
+
+</div>
+</div>
+</div>
 {% endblock %}

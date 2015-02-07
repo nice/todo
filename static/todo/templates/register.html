@@ -2,6 +2,9 @@
 {% load widget_tweaks %}
 
 {% block container %}
+<div class="outer">
+<div class="middle">
+<div class="inner">
     <div class="authbox">
         <h3 align="center">Simple Todo</h3>
         {% if form.errors %}
@@ -27,4 +30,8 @@
             Already have an account? <a href="{% url 'user_login' %}">Login Now!</a>
         </p>
     </div> <!-- .authbox -->
+
+</div>
+</div>
+</div>
 {% endblock %}
