@@ -1,12 +1,21 @@
 body {
     background: #ecf0f1;
 }
+.messages {
+    max-width: 960px;
+    margin: 0 auto;
+}
 .wrapper {
     max-width: 960px;
     margin: 15px auto;
     padding: 15px 25px;
     background: #ffffff;
     min-height: 600px;
+    -webkit-box-shadow: 0 0 10px #cccccc;
+       -moz-box-shadow: 0 0 10px #cccccc;
+        -ms-box-shadow: 0 0 10px #cccccc;
+         -o-box-shadow: 0 0 10px #cccccc;
+            box-shadow: 0 0 10px #cccccc;
 }
 
 .authbox {
@@ -27,4 +36,13 @@ body {
 }
 .field-error {
     border: 1px solid tomato !important;
+}
+.todo {
+    background:  #FFB6C1;
+}
+.doing {
+    background:  #ADD8E6;
+}
+.done {
+    background: #90EE90;
 }
